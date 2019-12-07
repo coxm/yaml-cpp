@@ -5,10 +5,16 @@
 
 # Compute paths
 get_filename_component(YAML_CPP_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-set(YAML_CPP_INCLUDE_DIR "@CONFIG_INCLUDE_DIRS@")
+set(yaml-cpp_INCLUDE_DIRS "@CMAKE_INSTALL_INCLUDEDIR@")
+# For backwards-compatibility, set YAML_CPP_INCLUDE_DIR.
+set(YAML_CPP_INCLUDE_DIR ${yaml-cpp_INCLUDE_DIRS})
 
 # Our library dependencies (contains definitions for IMPORTED targets)
-include("${YAML_CPP_CMAKE_DIR}/yaml-cpp-targets.cmake")
+if(NOT TARGET yaml-cpp::yaml-cpp)
+  include("${YAML_CPP_CMAKE_DIR}/yaml-cpp-targets.cmake")
+endif()
 
 # These are IMPORTED targets created by yaml-cpp-targets.cmake
-set(YAML_CPP_LIBRARIES "@EXPORT_TARGETS@")
+set(yaml-cpp_LIBRARIES yaml-cpp::yaml-cpp)
+# For backwards-compatibility, set YAML_CPP_LIBRARIES.
+set(YAML_CPP_LIBRARIES ${yaml-cpp_LIBRARIES})
